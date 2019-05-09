@@ -26,7 +26,7 @@ import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import com.tencent.mm.opensdk.modelpay.PayResp
 import io.flutter.plugin.common.MethodChannel
 
-object FluwxResponseHandler {
+object FlutterResponseHandler {
 
     private var channel: MethodChannel? = null
 
@@ -36,9 +36,8 @@ object FluwxResponseHandler {
     private const val type = "type"
 
     fun setMethodChannel(channel: MethodChannel) {
-        FluwxResponseHandler.channel = channel
+        FlutterResponseHandler.channel = channel
     }
-
 
     fun handleResponse(response: BaseResp) {
         when (response) {
@@ -71,8 +70,6 @@ object FluwxResponseHandler {
                 openId to response.openId,
                 WechatPluginKeys.PLATFORM to WechatPluginKeys.ANDROID
         )
-
-
 
         response.extMsg?.let {
             //            "extMsg" to response.extMsg,
@@ -130,6 +127,5 @@ object FluwxResponseHandler {
 
         channel?.invokeMethod("onAuthResponse", result)
     }
-
 
 }

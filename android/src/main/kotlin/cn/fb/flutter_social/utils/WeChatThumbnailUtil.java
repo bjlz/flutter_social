@@ -195,10 +195,13 @@ public class WeChatThumbnailUtil {
      * @return
      */
     public static byte[] bmpToByteArray(Bitmap bitmap, int maxKb) {
+
+        int kb = maxKb * 1024;
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, output);
         int options = 100;
-        while (output.toByteArray().length > maxKb && options != 10) {
+        while (output.toByteArray().length > kb && options != 10) {
             output.reset(); //清空output
             bitmap.compress(Bitmap.CompressFormat.JPEG, options, output);//这里压缩options%，把压缩后的数据存放到output中
             options -= 10;

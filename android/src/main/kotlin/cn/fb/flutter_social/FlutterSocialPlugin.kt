@@ -3,9 +3,8 @@ package cn.fb.flutter_social
 import cn.fb.flutter_social.constant.WeChatPluginMethods
 import cn.fb.flutter_social.constant.WeChatPluginMethods.IS_WE_CHAT_INSTALLED
 import cn.fb.flutter_social.handler.*
-import cn.fb.flutter_social.handler.FluwxAuthHandler
-import cn.fb.flutter_social.handler.FluwxLaunchMiniProgramHandler
-import cn.fb.flutter_social.handler.FluwxShareHandler
+import cn.fb.flutter_social.handler.FlutterAuthHandler
+import cn.fb.flutter_social.handler.FlutterLaunchMiniProgramHandler
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -19,22 +18,22 @@ class FlutterSocialPlugin(private val registrar: Registrar, channel: MethodChann
             val channel = MethodChannel(registrar.messenger(), "cn.fb/flutter_social")
 
             WXAPiHandler.setRegistrar(registrar)
-            FluwxResponseHandler.setMethodChannel(channel)
+            FlutterResponseHandler.setMethodChannel(channel)
             channel.setMethodCallHandler(FlutterSocialPlugin(registrar, channel))
         }
     }
 
-    private val fluwxShareHandler = FluwxShareHandler()
-    private val fluwxAuthHandler = FluwxAuthHandler(channel)
-    private val fluwxPayHandler = FluwxPayHandler()
-    private val fluwxLaunchMiniProgramHandler = FluwxLaunchMiniProgramHandler()
-    private val fluwxSubscribeMsgHandler = FluwxSubscribeMsgHandler()
+    private val flutterShareHandler = FlutterShareHandler()
+    private val flutterAuthHandler = FlutterAuthHandler(channel)
+    private val flutterPayHandler = FlutterPayHandler()
+    private val flutterLaunchMiniProgramHandler = FlutterLaunchMiniProgramHandler()
+    private val flutterSubscribeMsgHandler = FlutterSubscribeMsgHandler()
 
     init {
-        fluwxShareHandler.setRegistrar(registrar)
-        fluwxShareHandler.setMethodChannel(channel)
+        flutterShareHandler.setRegistrar(registrar)
+        flutterShareHandler.setMethodChannel(channel)
         registrar.addViewDestroyListener {
-            fluwxAuthHandler.removeAllListeners()
+            flutterAuthHandler.removeAllListeners()
             false
         }
     }
@@ -59,37 +58,37 @@ class FlutterSocialPlugin(private val registrar: Registrar, channel: MethodChann
         }
 
         if ("sendAuth" == call.method) {
-            fluwxAuthHandler.sendAuth(call, result)
+            flutterAuthHandler.sendAuth(call, result)
             return
         }
 
         if ("authByQRCode" == call.method) {
-            fluwxAuthHandler.authByQRCode(call, result)
+            flutterAuthHandler.authByQRCode(call, result)
             return
         }
 
         if ("stopAuthByQRCode" == call.method) {
-            fluwxAuthHandler.stopAuthByQRCode(result)
+            flutterAuthHandler.stopAuthByQRCode(result)
             return
         }
 
         if (call.method == WeChatPluginMethods.ORDER) {
-            fluwxPayHandler.pay(call, result)
+            flutterPayHandler.pay(call, result)
             return
         }
 
         if (call.method == WeChatPluginMethods.LAUNCH_MINI_PROGRAM) {
-            fluwxLaunchMiniProgramHandler.launchMiniProgram(call, result)
+            flutterLaunchMiniProgramHandler.launchMiniProgram(call, result)
             return
         }
 
         if (WeChatPluginMethods.SUBSCRIBE_MSG == call.method) {
-            fluwxSubscribeMsgHandler.subScribeMsg(call, result)
+            flutterSubscribeMsgHandler.subScribeMsg(call, result)
             return
         }
 
         if (call.method.startsWith("share")) {
-            fluwxShareHandler.handle(call, result)
+            flutterShareHandler.handle(call, result)
         } else {
             result.notImplemented()
         }

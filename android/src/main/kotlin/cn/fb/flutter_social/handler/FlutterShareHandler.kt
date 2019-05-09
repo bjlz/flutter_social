@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2018 The OpenFlutter Organization
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package cn.fb.flutter_social.handler
 
 import android.graphics.BitmapFactory
@@ -22,20 +7,13 @@ import cn.fb.flutter_social.constant.WechatPluginKeys
 import cn.fb.flutter_social.utils.ShareImageUtil
 import cn.fb.flutter_social.utils.WeChatThumbnailUtil
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram
-
 import com.tencent.mm.opensdk.modelmsg.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 import kotlinx.coroutines.*
 
-/***
- * Created by mo on 2018/8/8
- * 冷风如刀，以大地为砧板，视众生为鱼肉。
- * 万里飞雪，将穹苍作烘炉，熔万物为白银。
- **/
-internal class FluwxShareHandler {
-
+internal class FlutterShareHandler {
 
     private var channel: MethodChannel? = null
 
@@ -98,13 +76,11 @@ internal class FluwxShareHandler {
                         WechatPluginKeys.RESULT to done
                 )
         )
-
     }
 
     private fun shareMiniProgram(call: MethodCall, result: MethodChannel.Result) {
         val miniProgramObj = WXMiniProgramObject()
         miniProgramObj.webpageUrl = call.argument("webPageUrl") // 兼容低版本的网页链接
-//        miniProgramObj.miniprogramType = call.argument("miniProgramType") ?: 0// 正式版:0，测试版:1，体验版:2
 
         // 可选打开 开发版，体验版和正式版
         val type = call.argument("miniProgramType") ?: "release"
@@ -114,26 +90,21 @@ internal class FluwxShareHandler {
             else -> WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE
         }
 
-        miniProgramObj.userName = call.argument("userName")     // 小程序原始id
+        miniProgramObj.userName = call.argument("userName")    // 小程序原始id
         miniProgramObj.path = call.argument("path")            //小程序页面路径
         miniProgramObj.withShareTicket = call.argument("withShareTicket") ?: true
-        val msg = WXMediaMessage(miniProgramObj)
-        msg.title = call.argument(WechatPluginKeys.TITLE)                   // 小程序消息title
-        msg.description = call.argument("description")               // 小程序消息desc
-//        val thumbnail: String? = call.argument(WechatPluginKeys.THUMBNAIL)
 
+        val msg = WXMediaMessage(miniProgramObj)
+        msg.title = call.argument(WechatPluginKeys.TITLE)   // 小程序消息title
+        msg.description = call.argument("description") // 小程序消息desc
 
         val byteArray: ByteArray? = call.argument<ByteArray>(WechatPluginKeys.THUMBNAIL_DATA)
 
-        val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
-        val compressedByteArray = WeChatThumbnailUtil.bmpToByteArray(bitmap, 512)
+        val thumbnailBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
+        val compressedByteArray = WeChatThumbnailUtil.bmpToByteArray(thumbnailBitmap, 64)
 
         GlobalScope.launch((Dispatchers.Main), CoroutineStart.DEFAULT) {
-//            if (thumbnail.isNullOrBlank()) {
-//                msg.thumbData = null
-//            } else {
-//                msg.thumbData = getThumbnailByteArrayMiniProgram(registrar, thumbnail)
-//            }
+
             msg.thumbData = compressedByteArray
 
             val req = SendMessageToWX.Req()
@@ -146,10 +117,7 @@ internal class FluwxShareHandler {
                             WechatPluginKeys.RESULT to done
                     )
             )
-
         }
-
-
     }
 
     private suspend fun getThumbnailByteArrayMiniProgram(registrar: PluginRegistry.Registrar?, thumbnail: String): ByteArray {
@@ -167,12 +135,6 @@ internal class FluwxShareHandler {
         }.await()
     }
 
-    //    private suspend fun getThumbnailByteArrayCommon(registrar: PluginRegistry.Registrar?, thumbnail: String): ByteArray {
-//        return GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT, {
-//            val result = WeChatThumbnailUtil.thumbnailForCommon(thumbnail, registrar)
-//            result ?: byteArrayOf()
-//        }).await()
-//    }
     private suspend fun getThumbnailByteArrayCommon(registrar: PluginRegistry.Registrar?, thumbnail: String): ByteArray {
         return GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
             val result = WeChatThumbnailUtil.thumbnailForCommon(thumbnail, registrar)
@@ -181,24 +143,15 @@ internal class FluwxShareHandler {
     }
 
     private fun shareImage(call: MethodCall, result: MethodChannel.Result) {
-//        val imagePath = call.argument<String>(WechatPluginKeys.IMAGE)
-
-
         GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT) {
-//            val byteArray: ByteArray? = if (imagePath.isNullOrBlank()) {
-//                byteArrayOf()
-//            } else {
-//                getImageByteArrayCommon(registrar, imagePath!!)
-//            }
 
-            // Add by CGM
             val byteArray: ByteArray? = call.argument<ByteArray>(WechatPluginKeys.DATA)
 
-            val bitmap1 = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
-            val byteArray1 = WeChatThumbnailUtil.bmpToByteArray(bitmap1, 512)
+            val originalBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
+            val compressedByteArray = WeChatThumbnailUtil.bmpToByteArray(originalBitmap, 512)
 
             val imgObj = if (byteArray != null && byteArray.isNotEmpty()) {
-                WXImageObject(byteArray1)
+                WXImageObject(compressedByteArray)
             } else {
                 null
             }
@@ -208,20 +161,11 @@ internal class FluwxShareHandler {
                 return@launch
             }
 
-//            var thumbnail: String? = call.argument(WechatPluginKeys.THUMBNAIL)
-//
-//            if (thumbnail.isNullOrBlank()) {
-//                thumbnail = imagePath
-//            }
 
-            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
+            // 处理缩略图
+            val thumbnailBitmap = BitmapFactory.decodeByteArray(compressedByteArray, 0, compressedByteArray!!.size)
+            val thumbnailData = WeChatThumbnailUtil.bmpToByteArray(thumbnailBitmap, 64)
 
-//            val thumbnailData = getThumbnailByteArrayCommon(registrar, thumbnail!!)
-
-            val thumbnailData = WeChatThumbnailUtil.bmpToByteArray(bitmap, 32)
-
-
-//           val thumbnailData =  Util.bmpToByteArray(bitmap,true)
             handleShareImage(imgObj, call, thumbnailData, result)
         }
 
@@ -285,8 +229,6 @@ internal class FluwxShareHandler {
                     )
             )
         }
-
-
     }
 
     private fun shareVideo(call: MethodCall, result: MethodChannel.Result) {
@@ -319,8 +261,6 @@ internal class FluwxShareHandler {
                     )
             )
         }
-
-
     }
 
 
@@ -349,27 +289,6 @@ internal class FluwxShareHandler {
             )
         }
     }
-
-    //    private fun createWxImageObject(imagePath:String):WXImageObject?{
-//        var imgObj: WXImageObject? = null
-//        var imageFile:File? = null
-//        if (imagePath.startsWith(WeChatPluginImageSchema.SCHEMA_ASSETS)){
-//            val key = imagePath.substring(WeChatPluginImageSchema.SCHEMA_ASSETS.length, imagePath.length)
-//            val assetFileDescriptor = AssetManagerUtil.openAsset(registrar,key,"")
-//            imageFile  = FileUtil.createTmpFile(assetFileDescriptor)
-//        }else if (imagePath.startsWith(WeChatPluginImageSchema.SCHEMA_FILE)){
-//            imageFile = File(imagePath)
-//        }
-//        if(imageFile != null && imageFile.exists()){
-//            imgObj = WXImageObject()
-//            imgObj.setImagePath(imagePath)
-//        }else{
-//            Log.d(WechatPlugin.TAG,CallResult.RESULT_FILE_NOT_EXIST)
-//        }
-//
-//        return  imgObj
-//    }
-
 
     private fun getScene(value: String) = when (value) {
         WechatPluginKeys.SCENE_TIMELINE -> SendMessageToWX.Req.WXSceneTimeline

@@ -6,7 +6,7 @@ import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-internal class FluwxLaunchMiniProgramHandler {
+internal class FlutterLaunchMiniProgramHandler {
 
     fun launchMiniProgram(call: MethodCall, result: MethodChannel.Result) {
         val req = WXLaunchMiniProgram.Req()

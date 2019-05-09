@@ -22,7 +22,7 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-internal class FluwxAuthHandler(private val methodChannel: MethodChannel) {
+internal class FlutterAuthHandler(private val methodChannel: MethodChannel) {
     //    private DiffDevOAuthFactory.getDiffDevOAuth()
     private val qrCodeAuth by lazy {
         DiffDevOAuthFactory.getDiffDevOAuth()

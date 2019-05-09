@@ -4,7 +4,7 @@ import com.tencent.mm.opensdk.modelbiz.SubscribeMessage
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class FluwxSubscribeMsgHandler {
+class FlutterSubscribeMsgHandler {
     fun subScribeMsg(call: MethodCall, result: MethodChannel.Result) {
         val appId = call.argument<String>("appId")
         val scene = call.argument<Int>("scene")

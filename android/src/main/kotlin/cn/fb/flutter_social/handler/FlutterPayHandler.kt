@@ -22,7 +22,7 @@ import com.tencent.mm.opensdk.modelpay.PayReq
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class FluwxPayHandler {
+class FlutterPayHandler {
 
     fun pay(call: MethodCall, result: MethodChannel.Result) {
 
@@ -31,7 +31,7 @@ class FluwxPayHandler {
             return
         } else {
 
-// 将该app注册到微信
+            // 将该app注册到微信
             val request = PayReq()
             request.appId = call.argument("appId")
             request.partnerId = call.argument("partnerId")
@@ -49,7 +49,6 @@ class FluwxPayHandler {
                             WechatPluginKeys.RESULT to done
                     )
             )
-
         }
     }
 }
