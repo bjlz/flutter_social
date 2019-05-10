@@ -148,7 +148,7 @@ internal class FlutterShareHandler {
             val byteArray: ByteArray? = call.argument<ByteArray>(WechatPluginKeys.DATA)
 
             val originalBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
-            val compressedByteArray = WeChatThumbnailUtil.bmpToByteArray(originalBitmap, 512)
+            val compressedByteArray = WeChatThumbnailUtil.bmpToByteArray(originalBitmap, 128)
 
             val imgObj = if (byteArray != null && byteArray.isNotEmpty()) {
                 WXImageObject(compressedByteArray)
@@ -164,7 +164,7 @@ internal class FlutterShareHandler {
 
             // 处理缩略图
             val thumbnailBitmap = BitmapFactory.decodeByteArray(compressedByteArray, 0, compressedByteArray!!.size)
-            val thumbnailData = WeChatThumbnailUtil.bmpToByteArray(thumbnailBitmap, 64)
+            val thumbnailData = WeChatThumbnailUtil.compressByQuality(thumbnailBitmap, 32, true)
 
             handleShareImage(imgObj, call, thumbnailData, result)
         }

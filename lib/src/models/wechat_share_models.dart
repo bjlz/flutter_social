@@ -168,8 +168,6 @@ class WeChatShareMiniProgramModel extends WeChatShareModel {
 
   final Uint8List thumbnailData;
 
-  final String hdImagePath;
-
   final bool withShareTicket;
 
   ///[hdImagePath] only works on iOS.
@@ -183,7 +181,6 @@ class WeChatShareMiniProgramModel extends WeChatShareModel {
     this.thumbnail,
     this.thumbnailData,
     this.withShareTicket: false,
-    this.hdImagePath,
     String transaction,
     WeChatScene scene,
     String messageExt,
@@ -214,7 +211,6 @@ class WeChatShareMiniProgramModel extends WeChatShareModel {
       _thumbnail: thumbnail,
       _thumbnailData: thumbnailData,
       "withShareTicket": withShareTicket,
-      "hdImagePath": hdImagePath
     };
   }
 }

@@ -41,7 +41,7 @@ class FlutterShareHandler {
             media: nil
         )
         
-        shareInfo(info, scene: scene)
+        shareInfo(info, scene: scene, result: result)
     }
     
     private static func shareImage(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -60,7 +60,7 @@ class FlutterShareHandler {
             media: .image(image!)
         )
         
-        shareInfo(info, scene: scene)
+        shareInfo(info, scene: scene, result: result)
     }
     
     private static func shareURL(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -82,7 +82,7 @@ class FlutterShareHandler {
             media: .url(url)
         )
         
-        shareInfo(info, scene: scene)
+        shareInfo(info, scene: scene, result: result)
     }
     
     private static func shareMiniApp(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -159,7 +159,7 @@ class FlutterShareHandler {
 ////        MonkeyKing.de
     }
     
-    private static func shareInfo(_ info: MonkeyKing.Info, scene: String) {
+    private static func shareInfo(_ info: MonkeyKing.Info, scene: String, result: @escaping FlutterResult) {
         var message: MonkeyKing.Message?
         switch scene {
         case "session":
@@ -173,8 +173,9 @@ class FlutterShareHandler {
         }
         
         if let message = message {
-            MonkeyKing.deliver(message) { result in
-                print("result: \(result)")
+            MonkeyKing.deliver(message) { deliverResult in
+                print("result: \(deliverResult)")
+                result([Constants.Key.platform: Constants.Key.iOS, Constants.Key.result: true])
             }
         }
     }
