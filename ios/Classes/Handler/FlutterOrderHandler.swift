@@ -27,6 +27,8 @@ struct FlutterOrderHandler {
         
         MonkeyKing.deliver(MonkeyKing.Order.weChat(urlString: urlString)) { (done) in
             result([Constants.Key.platform: Constants.Key.iOS, Constants.Key.result: done])
+            
+            FlutterResponseHandler.default.handlePayResponse(done: done)
             if (done) {
                 print("支付成功")
             } else {

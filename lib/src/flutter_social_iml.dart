@@ -276,7 +276,7 @@ Future pay({
   String signType: "",
   String extData: "",
 }) async {
-  return await _channel.invokeMethod("payWithFluwx", {
+  return await _channel.invokeMethod("order", {
     "appId": appId,
     "partnerId": partnerId,
     "prepayId": prepayId,

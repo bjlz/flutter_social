@@ -8,6 +8,8 @@ public class SwiftFlutterSocialPlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: "cn.fb/flutter_social", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterSocialPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        
+        FlutterResponseHandler.default.methodChannel = channel
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
