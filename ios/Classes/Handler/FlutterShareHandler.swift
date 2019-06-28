@@ -27,12 +27,11 @@ class FlutterShareHandler {
     }
     
     private static func shareText(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let arguments = call.arguments as? [String: String] else {
+        guard let arguments = call.arguments as? [String: Any], let text = arguments[Constants.Key.text] as? String else {
             return
         }
         
-        let text = arguments[Constants.Key.text] ?? ""
-        let scene = arguments[Constants.Key.scene] ?? "session"
+        let scene = arguments[Constants.Key.scene] as? String ?? "session"
         
         let info = MonkeyKing.Info(
             title: text,
