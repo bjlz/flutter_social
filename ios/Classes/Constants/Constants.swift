@@ -62,5 +62,6 @@ struct Constants {
         public static let shareWebPage = "shareWebPage"
         public static let shareMiniProgram = "shareMiniProgram"
         public static let launchMiniProgram = "launchMiniProgram"
+        public static let sendAuth = "sendAuth"
     }
 }

@@ -14,6 +14,10 @@ public struct FlutterMethodCallHandler {
         print("callMethod: " + callMethod)
         if "registerApp" == callMethod {
             FlutterWXApiHandler.registerApp(call, result: result)
+        } else if "sendAuth" == callMethod {
+            FlutterAuthHandler.handleAuth(call, result: result)
+        } else if "isWeChatInstalled" == callMethod {
+            FlutterWXApiHandler.checkWeChatInstallation(call, result: result)
         } else if "order" == callMethod {
             FlutterOrderHandler.handleOrder(call, result: result)
         } else if callMethod == Constants.Methods.launchMiniProgram {

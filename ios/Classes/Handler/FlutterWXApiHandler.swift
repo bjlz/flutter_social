@@ -42,7 +42,7 @@ struct FlutterWXApiHandler {
             result(FlutterError(code: Constants.CallResults.resultErrorNeedWeChat, message: Constants.CallResults.resultMessageNeedWeChat, details: nil))
             return
         } else {
-            result(MonkeyKing.SupportedPlatform.weChat)
+            result(MonkeyKing.SupportedPlatform.weChat.isAppInstalled)
         }
     }
     
