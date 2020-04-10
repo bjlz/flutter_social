@@ -162,16 +162,16 @@ class FlutterShareHandler {
     
     private static func shareVideo(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = call.arguments as? [String: Any],
-            let flutterData = arguments[Constants.Key.data] as? FlutterStandardTypedData else {
+            let flutterData = arguments[Constants.Key.thumbnail] as? FlutterStandardTypedData else {
             return
         }
         
         let videoUrl = arguments[Constants.Key.videoUrl] as? String
         let videoLowBandUrl = arguments[Constants.Key.videoLowBandUrl] as? String
         let title = arguments[Constants.Key.title] as? String
-        let thumbnail = arguments[Constants.Key.thumbnail]
-        let scene = arguments[Constants.Key.scene]
-        let description = arguments[Constants.Key.description]
+//        let thumbnail = arguments[Constants.Key.thumbnail]
+        let scene = arguments[Constants.Key.scene] as? String
+        let description = arguments[Constants.Key.description] as? String
         
         let image = UIImage(data: flutterData.data)
         
