@@ -43,6 +43,9 @@ struct Constants {
         public static let iOS = "iOS"
         
         public static let result = "result"
+        
+        public static let videoUrl = "videoUrl"
+        public static let videoLowBandUrl = "videoLowBandUrl"
     }
     
     struct CallResults {

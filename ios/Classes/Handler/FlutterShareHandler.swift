@@ -21,6 +21,8 @@ class FlutterShareHandler {
             shareURL(call, result: result)
         case Constants.Methods.shareMiniProgram:
             shareMiniApp(call, result: result)
+        case Constants.shareVideo:
+            shareVideo(call, result: result)
         default:
             break
         }
@@ -156,6 +158,32 @@ class FlutterShareHandler {
 //
 //
 ////        MonkeyKing.de
+    }
+    
+    private static func shareVideo(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any],
+            let flutterData = arguments[Constants.Key.data] as? FlutterStandardTypedData else {
+            return
+        }
+        
+        let videoUrl = arguments[Constants.Key.videoUrl] as? String
+        let videoLowBandUrl = arguments[Constants.Key.videoLowBandUrl] as? String
+        let title = arguments[Constants.Key.title] as? String
+        let thumbnail = arguments[Constants.Key.thumbnail]
+        let scene = arguments[Constants.Key.scene]
+        let description = arguments[Constants.Key.description]
+        
+        let image = UIImage(data: flutterData.data)
+        
+        let info = MonkeyKing.Info(
+            title: title,
+            thumbnail: image,
+            videoUrl: videoUrl,
+            videoLowBandUrl: videoLowBandUrl,
+            description: description
+        )
+        
+        shareInfo(info, scene: scene, result: result)
     }
     
     private static func shareInfo(_ info: MonkeyKing.Info, scene: String, result: @escaping FlutterResult) {
